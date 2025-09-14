@@ -14,7 +14,208 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      brands: {
+        Row: {
+          created_at: string
+          device_type: Database["public"]["Enums"]["device_type"]
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          device_type: Database["public"]["Enums"]["device_type"]
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          device_type?: Database["public"]["Enums"]["device_type"]
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      devices: {
+        Row: {
+          brand_id: string
+          created_at: string
+          id: string
+          issue_description: string | null
+          model: string
+          repair_cost: number | null
+          repair_date: string
+          shop_id: string
+          status: Database["public"]["Enums"]["device_status"]
+          technician_notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          brand_id: string
+          created_at?: string
+          id?: string
+          issue_description?: string | null
+          model: string
+          repair_cost?: number | null
+          repair_date?: string
+          shop_id: string
+          status?: Database["public"]["Enums"]["device_status"]
+          technician_notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          brand_id?: string
+          created_at?: string
+          id?: string
+          issue_description?: string | null
+          model?: string
+          repair_cost?: number | null
+          repair_date?: string
+          shop_id?: string
+          status?: Database["public"]["Enums"]["device_status"]
+          technician_notes?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "devices_brand_id_fkey"
+            columns: ["brand_id"]
+            isOneToOne: false
+            referencedRelation: "brands"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "devices_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notes: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          device_id: string | null
+          id: string
+          note_type: string | null
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          device_id?: string | null
+          id?: string
+          note_type?: string | null
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          device_id?: string | null
+          id?: string
+          note_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notes_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "devices"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          notes: string | null
+          payment_date: string
+          shop_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          shop_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          notes?: string | null
+          payment_date?: string
+          shop_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_shop_id_fkey"
+            columns: ["shop_id"]
+            isOneToOne: false
+            referencedRelation: "shops"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          id: string
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      shops: {
+        Row: {
+          contact: string | null
+          created_at: string
+          id: string
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          contact?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          contact?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +224,9 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      device_status: "under_repair" | "repaired" | "not_repaired"
+      device_type: "mobile" | "laptop"
+      user_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +353,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      device_status: ["under_repair", "repaired", "not_repaired"],
+      device_type: ["mobile", "laptop"],
+      user_role: ["admin", "user"],
+    },
   },
 } as const
